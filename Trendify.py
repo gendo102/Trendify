@@ -1,3 +1,8 @@
+# The MIT License (MIT)
+# Copyright (c) 2014 Paul Lamere
+
+# Edited By: Ananya Vittal and Kathleen Gendotti
+
 #pip install spotipy
 
 import spotipy
