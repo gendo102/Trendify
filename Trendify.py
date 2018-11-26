@@ -8,6 +8,7 @@
 # pip install spotipy
 
 import spotipy
+import spotipy.util as util
 from spotipy.oauth2 import SpotifyClientCredentials
 
 # Authorize with client id and client secret
@@ -16,26 +17,51 @@ client_secret = "9f3aedb877604a2ba0499296a4f2a720"
 client_credentials_manager = SpotifyClientCredentials(client_id=client_id, client_secret=client_secret)
 sp = spotipy.Spotify(client_credentials_manager=client_credentials_manager)
 
+print
+
 # User inputs artist name and prints popular tracks
-artist_name = input("Enter an artist name to display their popular tracks: ")
+artist_name = " "
+artist_name = raw_input("Enter an artist name to display their popular tracks: ")
 results = sp.search(q=artist_name, limit=20)
 for i, t in enumerate(results['tracks']['items']):
-    print(' ', i, t['name'])
+    print ' ', i, t['name']
 
-print("--------------------------------------------------------")
+print
 
 # User inputs artist name and prints related artists
-artist_name = input("Enter an artist name to display related artists: ")
+artist_name = raw_input("Enter an artist name to display related artists: ")
 result = sp.search(q='artist:' + artist_name, type='artist')
 try:
     name = result['artists']['items'][0]['name']
     uri = result['artists']['items'][0]['uri']
 
     related = sp.artist_related_artists(uri)
-    print('Related artists for', name)
+    print'Related artists for', name
     for artist in related['artists']:
-        print('  ', artist['name'])
+        print ' ', artist['name']
 except:
-    print("usage show_related.py [artist-name]")
+    print "usage show_related.py [artist-name]"
 
-print("--------------------------------------------------------")
+print
+
+# Authenticates user and displays user's favorite songs
+username = raw_input("Enter the username to your Spotify account: ")
+scope = 'user-library-read'
+client_id = '1c65cc2af3e74c5bb4c116447dce2d59'
+client_secret = '9f3aedb877604a2ba0499296a4f2a720'
+redirect_uri = 'https://www.spotify.com/us/'
+
+token = util.prompt_for_user_token(username,scope,client_id,client_secret,redirect_uri)
+
+if token:
+    sp = spotipy.Spotify(auth=token)
+    results = sp.current_user_saved_tracks()
+    print "Loading your Favorite Songs..."
+    print
+    for item in results['items']:
+        track = item['track']
+        print track['name'] + ' - ' + track['artists'][0]['name']
+else:
+    print "Can't get token for", username
+
+print
