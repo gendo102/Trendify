@@ -6,20 +6,15 @@
 # Edited By: Ananya Vittal and Kathleen Gendotti
 
 # pip install spotipy
-
-import sys
 import spotipy
 import spotipy.util as util
 from spotipy.oauth2 import SpotifyClientCredentials
-
 
 # Authorize with client id and client secret
 client_id = "1c65cc2af3e74c5bb4c116447dce2d59"
 client_secret = "9f3aedb877604a2ba0499296a4f2a720"
 client_credentials_manager = SpotifyClientCredentials(client_id=client_id, client_secret=client_secret)
 sp = spotipy.Spotify(client_credentials_manager=client_credentials_manager)
-
-print
 
 def one():
     # User inputs artist name and prints popular tracks
@@ -49,14 +44,6 @@ def two():
 
 def three():
     # Authenticates user and displays user's favorite songs
-    username = raw_input("Enter the username to your Spotify account: ")
-    scope = 'user-library-read'
-    client_id = '1c65cc2af3e74c5bb4c116447dce2d59'
-    client_secret = '9f3aedb877604a2ba0499296a4f2a720'
-    redirect_uri = 'https://www.spotify.com/us/'
-
-    token = util.prompt_for_user_token(username,scope,client_id,client_secret,redirect_uri)
-
     if token:
         sp = spotipy.Spotify(auth=token)
         results = sp.current_user_saved_tracks()
@@ -71,14 +58,6 @@ def three():
 print
 
 def four():
-    username = raw_input("Enter the username to your Spotify account: ")
-    scope = 'user-library-read'
-    client_id = '1c65cc2af3e74c5bb4c116447dce2d59'
-    client_secret = '9f3aedb877604a2ba0499296a4f2a720'
-    redirect_uri = 'https://www.spotify.com/us/'
-
-    token = util.prompt_for_user_token(username,scope,client_id,client_secret,redirect_uri)
-
     if token:
         sp = spotipy.Spotify(auth=token)
         sp.trace = False
@@ -87,7 +66,6 @@ def four():
             print("%d %s" %(i, item['name']))
     else:
         print("Can't get token for", username)
-print
 
 options = { 1: one,
             2: two,
@@ -95,15 +73,36 @@ options = { 1: one,
             4: four,
 }
 
-print("Welcome to Trendify!")
-display_menu = raw_input("Would you like to view the menu? (Y/N)")
-while(display_menu != "N"):
-    print("\n Menu: ")
-    print("Option #1: Display an artists popular tracks")
+# User authentication for token
+username = raw_input("Enter the username to your Spotify account: ")
+scope = 'user-library-read'
+client_id = '1c65cc2af3e74c5bb4c116447dce2d59'
+client_secret = '9f3aedb877604a2ba0499296a4f2a720'
+redirect_uri = 'https://www.spotify.com/us/'
+token = util.prompt_for_user_token(username,scope,client_id,client_secret,redirect_uri)
+
+# Create spotify object
+spotifyObject = spotipy.Spotify(auth=token)
+user = spotifyObject.current_user()
+displayName = user['display_name']
+followers = user['followers']['total']
+
+# Displays user's name and number of followers
+print
+print "Hi " + displayName + ", welcome to Trendify!"
+print "You have " + str(followers) + " followers."
+print
+
+# Menu that displays user options
+display_menu = raw_input("Would you like to view the menu? (Y/N): ")
+while(display_menu != "N" and display_menu != "n"):
+    print("\nMenu: ")
+    print("Option #1: Display an artist's popular tracks")
     print("Option #2: Display related artists")
-    print("Option #3: Display your most played songs")
+    print("Option #3: Display your favorite songs")
     print("Option #4: Display your playlists")
-    print("Option #5: Exit")
+    print("Option #5: Exit program")
+    print
     number = raw_input("Please enter the number of the option you want: ")
     if(number == "1"):
         options[1]()
@@ -114,4 +113,5 @@ while(display_menu != "N"):
     elif(number == "4"):
         options[4]()
     elif(number == "5"):
+        print "Exiting..."
         exit()
