@@ -68,8 +68,6 @@ def four():
         print("Can't get token for", username)
 
 def five():
-    scope = 'user-top-read'
-    token = util.prompt_for_user_token(username,scope,client_id,client_secret,redirect_uri)
     if token:
         sp = spotipy.Spotify(auth=token)
         sp.trace = False
@@ -92,7 +90,7 @@ options = { 1: one,
 
 # User authentication for token
 username = raw_input("Enter the username to your Spotify account: ")
-scope = 'user-library-read'
+scope = 'user-library-read user-top-read'
 client_id = '1c65cc2af3e74c5bb4c116447dce2d59'
 client_secret = '9f3aedb877604a2ba0499296a4f2a720'
 redirect_uri = 'https://www.spotify.com/us/'
