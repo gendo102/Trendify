@@ -22,7 +22,7 @@ def one():
     artist_name = raw_input("Enter an artist name to display their popular tracks: ")
     results = sp.search(q=artist_name, limit=20)
     for i, t in enumerate(results['tracks']['items']):
-        print ' ', i, t['name']
+        print ' ', i+12, t['name']
     print
 
 def two():
@@ -63,7 +63,23 @@ def four():
         sp.trace = False
         results = sp.current_user_playlists(limit=50)
         for i, item in enumerate(results['items']):
-            print("%d %s" %(i, item['name']))
+            print("%d %s" %(i+1, item['name']))
+    else:
+        print("Can't get token for", username)
+
+def five():
+    scope = 'user-top-read'
+    token = util.prompt_for_user_token(username,scope,client_id,client_secret,redirect_uri)
+    if token:
+        sp = spotipy.Spotify(auth=token)
+        sp.trace = False
+        ranges = ['short_term', 'medium_term', 'long_term']
+        for range in ranges:
+            print "Range:", range
+            results = sp.current_user_top_artists(time_range=range, limit=10)
+            for i, item in enumerate(results['items']):
+                print i+1, item['name']
+            print
     else:
         print("Can't get token for", username)
 
@@ -71,6 +87,7 @@ options = { 1: one,
             2: two,
             3: three,
             4: four,
+            5: five
 }
 
 # User authentication for token
@@ -101,7 +118,8 @@ while(display_menu != "N" and display_menu != "n"):
     print("Option #2: Display related artists")
     print("Option #3: Display your favorite songs")
     print("Option #4: Display your playlists")
-    print("Option #5: Exit program")
+    print("Option #5: Display your top artists")
+    print("Option #6: Exit program")
     print
     number = raw_input("Please enter the number of the option you want: ")
     if(number == "1"):
@@ -113,5 +131,7 @@ while(display_menu != "N" and display_menu != "n"):
     elif(number == "4"):
         options[4]()
     elif(number == "5"):
+        options[5]()
+    elif(number == "6"):
         print "Exiting..."
         exit()
