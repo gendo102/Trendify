@@ -9,6 +9,7 @@
 import spotipy
 import spotipy.util as util
 from spotipy.oauth2 import SpotifyClientCredentials
+import time
 
 # Authorize with client id and client secret
 client_id = "1c65cc2af3e74c5bb4c116447dce2d59"
@@ -21,14 +22,18 @@ def one():
     artist_name = " "
     artist_name = raw_input("Enter an artist name to display their popular tracks: ")
     results = sp.search(q=artist_name, limit=20)
+    print "\nLoading " + artist_name + "'s top songs...."
+    time.sleep(2)
     for i, t in enumerate(results['tracks']['items']):
-        print ' ', i+12, t['name']
+        print ' ', i+1, t['name']
     print
 
 def two():
     # User inputs artist name and prints related artists
     artist_name = raw_input("Enter an artist name to display related artists: ")
     result = sp.search(q='artist:' + artist_name, type='artist')
+    print "\nLoading related artists for " + artist_name + "...."
+    time.sleep(2)
     try:
         name = result['artists']['items'][0]['name']
         uri = result['artists']['items'][0]['uri']
@@ -48,6 +53,7 @@ def three():
         sp = spotipy.Spotify(auth=token)
         results = sp.current_user_saved_tracks()
         print "Loading your Favorite Songs..."
+        time.sleep(2)
         print
         for item in results['items']:
             track = item['track']
@@ -62,6 +68,8 @@ def four():
         sp = spotipy.Spotify(auth=token)
         sp.trace = False
         results = sp.current_user_playlists(limit=50)
+        print "\nLoading your playlists..."
+        time.sleep(2)
         for i, item in enumerate(results['items']):
             print("%d %s" %(i+1, item['name']))
     else:
@@ -72,6 +80,8 @@ def five():
         sp = spotipy.Spotify(auth=token)
         sp.trace = False
         ranges = ['short_term', 'medium_term', 'long_term']
+        print "\nLoading your top artists..."
+        time.sleep(2)
         for range in ranges:
             print "Range:", range
             results = sp.current_user_top_artists(time_range=range, limit=10)
