@@ -71,9 +71,9 @@ def four():
         print "\nLoading your playlists..."
         time.sleep(2)
         for i, item in enumerate(results['items']):
-            print("%d %s" %(i+1, item['name']))
+            print "%d %s" %(i+1, item['name'])
     else:
-        print("Can't get token for", username)
+        print "Can't get token for", username
 
 def five():
     if token:
@@ -89,7 +89,7 @@ def five():
                 print i+1, item['name']
             print
     else:
-        print("Can't get token for", username)
+        print "Can't get token for", username
 
 options = { 1: one,
             2: two,
@@ -121,13 +121,13 @@ print
 # Menu that displays user options
 display_menu = raw_input("Would you like to view the menu? (Y/N): ")
 while(display_menu != "N" and display_menu != "n"):
-    print("\nMenu: ")
-    print("Option #1: Display an artist's popular tracks")
-    print("Option #2: Display related artists")
-    print("Option #3: Display your favorite songs")
-    print("Option #4: Display your playlists")
-    print("Option #5: Display your top artists")
-    print("Option #6: Exit program")
+    print "\nMenu: "
+    print "Option #1: Display an artist's popular tracks"
+    print "Option #2: Display related artists"
+    print "Option #3: Display your favorite songs"
+    print "Option #4: Display your playlists"
+    print "Option #5: Display your top artists"
+    print "Option #6: Exit program"
     print
     number = raw_input("Please enter the number of the option you want: ")
     if(number == "1"):
